@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 )
+
+type fileContent struct{}
 
 func main() {
 	if len(os.Args) < 2 {
@@ -12,15 +14,32 @@ func main() {
 		return
 	}
 
-	data, err := ioutil.ReadFile(os.Args[1])
+	file, err := os.Open(os.Args[1])
 
 	if err != nil {
 		fmt.Println("File has a problem: ", os.Args[1])
 		fmt.Println("Error message: ", err)
+		os.Exit(1)
 	}
 
-	fmt.Println("Content in the file:")
-	fmt.Println("*******************************************************")
-	fmt.Println(string(data))
-	fmt.Println("*******************************************************")
+	fc := fileContent{}
+
+	io.Copy(fc, file)
+	// ******************************************************************************
+	// data, err := ioutil.ReadFile(os.Args[1])
+
+	// if err != nil {
+	// 	fmt.Println("File has a problem: ", os.Args[1])
+	// 	fmt.Println("Error message: ", err)
+	// }
+
+	// fmt.Println("Content in the file:")
+	// fmt.Println(string(data))
+	// *****************************************************************************
+}
+
+func (fileContent) Write(b []byte) (int, error) {
+	fmt.Println(string(b))
+
+	return len(b), nil
 }
