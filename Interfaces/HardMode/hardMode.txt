@@ -1,0 +1,5 @@
+This is a practice of understanding interface in Go!
+
+It will read this file and print out file content to the terminal.
+
+Good luck and Go!
